@@ -14,6 +14,7 @@
 
 #include "LogOutputters.h"
 #include "CArch.h"
+#include "TMethodJob.h"
 
 #include <fstream>
 //
@@ -54,12 +55,6 @@ CStopLogOutputter::write(ELevel, const char*)
 	return false;
 }
 
-const char*
-CStopLogOutputter::getNewline() const
-{
-	return "";
-}
-
 
 //
 // CConsoleLogOutputter
@@ -67,12 +62,10 @@ CStopLogOutputter::getNewline() const
 
 CConsoleLogOutputter::CConsoleLogOutputter()
 {
-	// do nothing
 }
 
 CConsoleLogOutputter::~CConsoleLogOutputter()
 {
-	// do nothing
 }
 
 void
@@ -94,16 +87,16 @@ CConsoleLogOutputter::show(bool showIfEmpty)
 }
 
 bool
-CConsoleLogOutputter::write(ELevel, const char* msg)
+CConsoleLogOutputter::write(ELevel level, const char* msg)
 {
 	ARCH->writeConsole(msg);
-	return true;
+	return true; // wtf?
 }
 
-const char*
-CConsoleLogOutputter::getNewline() const
+void
+CConsoleLogOutputter::flush()
 {
-	return ARCH->getNewlineForConsole();
+
 }
 
 
@@ -169,13 +162,6 @@ CSystemLogOutputter::write(ELevel level, const char* msg)
 	ARCH->writeLog(archLogLevel, msg);
 	return true;
 }
-
-const char*
-CSystemLogOutputter::getNewline() const
-{
-	return "";
-}
-
 
 //
 // CSystemLogger
@@ -261,47 +247,30 @@ CBufferedLogOutputter::write(ELevel, const char* message)
 	return true;
 }
 
-const char*
-CBufferedLogOutputter::getNewline() const
-{
-	return "";
-}
-
 
 //
 // CFileLogOutputter
 //
 
-CFileLogOutputter::CFileLogOutputter(const char * logFile)
+CFileLogOutputter::CFileLogOutputter(const char* logFile)
 {
 	assert(logFile != NULL);
-
-	m_handle.open(logFile, std::fstream::app);
-	// open file handle
+	m_fileName = logFile;
 }
 
 CFileLogOutputter::~CFileLogOutputter()
 {
-	// close file handle
-	if (m_handle.is_open())
-		m_handle.close();
-}
-
-const char*
-CFileLogOutputter::getNewline() const
-{
-	return "\n";
 }
 
 bool
 CFileLogOutputter::write(ILogOutputter::ELevel level, const char *message)
 {
+	std::ofstream m_handle;
+	m_handle.open(m_fileName.c_str(), std::fstream::app);
 	if (m_handle.is_open() && m_handle.fail() != true) {
-		m_handle << message;
-		
-		// write buffer to file
-		m_handle.flush();
+		m_handle << message << std::endl;
 	}
+	m_handle.close();
 
 	return true;
 }

@@ -32,7 +32,7 @@ class CThread;
 //! Implementation of IPlatformScreen for Microsoft Windows
 class CMSWindowsScreen : public CPlatformScreen {
 public:
-	CMSWindowsScreen(bool isPrimary);
+	CMSWindowsScreen(bool isPrimary, bool noHooks);
 	virtual ~CMSWindowsScreen();
 
 	//! @name manipulators
@@ -216,6 +216,9 @@ private:
 	// true if screen is being used as a primary screen, false otherwise
 	bool				m_isPrimary;
 
+	// true if hooks are not to be installed (useful for debugging)
+	bool				m_noHooks;
+
 	// true if windows 95/98/me
 	bool				m_is95Family;
 
@@ -303,6 +306,9 @@ private:
 	MOUSEKEYS			m_oldMouseKeys;
 
 	static CMSWindowsScreen*	s_screen;
+
+	// save last position of mouse to compute next delta movement
+	void saveMousePosition(SInt32 x, SInt32 y);
 };
 
 #endif

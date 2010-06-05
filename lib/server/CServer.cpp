@@ -293,7 +293,7 @@ CServer::adoptClient(CBaseClientProxy* client)
 
 	// send notification
 	CServer::CScreenConnectedInfo* info =
-		CServer::CScreenConnectedInfo::alloc(getName(client));
+		new CServer::CScreenConnectedInfo(getName(client));
 	EVENTQUEUE->addEvent(CEvent(CServer::getConnectedEvent(),
 								m_primaryClient->getEventTarget(), info));
 }
@@ -1558,8 +1558,7 @@ CServer::onKeyDown(KeyID id, KeyModifierMask mask, KeyButton button,
 	assert(m_active != NULL);
 
 	// relay
-	if (!m_keyboardBroadcasting ||
-			(screens && IKeyState::CKeyInfo::isDefault(screens))) {
+	if (!m_keyboardBroadcasting && IKeyState::CKeyInfo::isDefault(screens)) {
 		m_active->keyDown(id, mask, button);
 	}
 	else {
@@ -1586,8 +1585,7 @@ CServer::onKeyUp(KeyID id, KeyModifierMask mask, KeyButton button,
 	assert(m_active != NULL);
 
 	// relay
-	if (!m_keyboardBroadcasting ||
-			(screens && IKeyState::CKeyInfo::isDefault(screens))) {
+	if (!m_keyboardBroadcasting && IKeyState::CKeyInfo::isDefault(screens)) {
 		m_active->keyUp(id, mask, button);
 	}
 	else {
@@ -1640,7 +1638,7 @@ CServer::onMouseUp(ButtonID id)
 bool
 CServer::onMouseMovePrimary(SInt32 x, SInt32 y)
 {
-	LOG((CLOG_DEBUG2 "onMouseMovePrimary %d,%d", x, y));
+	LOG((CLOG_DEBUG4 "onMouseMovePrimary %d,%d", x, y));
 
 	// mouse move on primary (server's) screen
 	if (m_active != m_primaryClient) {
@@ -2134,22 +2132,6 @@ CServer::CSwitchInDirectionInfo::alloc(EDirection direction)
 	info->m_direction = direction;
 	return info;
 }
-
-
-//
-// CServer::CScreenConnectedInfo
-//
-
-CServer::CScreenConnectedInfo*
-CServer::CScreenConnectedInfo::alloc(const CString& screen)
-{
-	CScreenConnectedInfo* info =
-		(CScreenConnectedInfo*)malloc(sizeof(CScreenConnectedInfo) +
-								screen.size());
-	strcpy(info->m_screen, screen.c_str());
-	return info;
-}
-
 
 //
 // CServer::CKeyboardBroadcastInfo

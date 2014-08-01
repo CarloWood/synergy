@@ -17,3 +17,11 @@
 #doxygen
 /doc/doxygen
 /doc/doxygen.cfg
+
+#Other generated files and directories
+/src/gui/Makefile
+/build
+/ext/cryptopp562
+/ext/gmock-1.6.0
+/ext/gtest-1.6.0
+/lib

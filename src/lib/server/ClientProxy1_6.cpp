@@ -1,5 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
+ * Copyright (C) 2014 Carlo Wood
  * Copyright (C) 2013 Bolton Software Ltd.
  * 
  * This package is free software; you can redistribute it and/or

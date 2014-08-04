@@ -120,7 +120,20 @@ protected:
 
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const CEvent& event, void*) = 0;
-	virtual void 		mouseMove(SInt32 x, SInt32 y);
+	virtual void		mouseDown(ButtonID button);
+	virtual void		mouseUp(ButtonID button);
+	virtual void 		mouseMove(SInt32 x, SInt32 y);		// Called when mouse update is received from the server.
+	virtual void 		mouseRelativeMove(SInt32 x, SInt32 y);	// Called when a relative mouse update is received from the server.
+	virtual void		onMotionNotify(SInt32 x, SInt32 y);	// Called when an event is received that the real mouse moved.
+
+	// Manipulators.
+	void			pushMouseMove(SInt32 x, SInt32 y);
+	bool			popMouseMove(SInt32 x, SInt32 y);
+
+private:
+	struct { SInt32 x; SInt32 y; }	m_mouseMoveStack[6];
+	int				m_tail;
+	int				m_head;
 
 protected:
 	CString				m_draggingFilename;
@@ -131,4 +144,17 @@ protected:
 	bool				m_isOnScreen;		// true if mouse has entered the screen
 	SInt32				m_x, m_y;		// Screen shape.
 	SInt32				m_w, m_h;
+
+	// The below is used to deal with mouse warps.
+	UInt32				m_buttons;		// Map of mouse button states. Index is 0 is mouse button 1 etc.
+	SInt32				m_rcvdMouseX;		// Last mouse position received from the server.
+	SInt32				m_rcvdMouseY;
+	bool				m_rcvdMouse_valid;	// True when the last mouse move message received from the server was absolute.
+	SInt32				m_motionEventMouseX;	// The last known real mouse position.
+	SInt32				m_motionEventMouseY;
+	bool				m_relativeMouseMode;	// When true, we only pass relative mouse movements to the screen,
+								// because we temporarily might have lost track of where the mouse
+								// really is.
+	bool				m_locked;		// True when the DLCK message to the server was a lock request.
+	int				m_relativeCount;	// Number of received mouseMove messages from the server while in m_relativeMouseMode.
 };

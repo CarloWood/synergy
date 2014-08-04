@@ -153,8 +153,7 @@ CXWindowsScreen::CXWindowsScreen(
 		throw;
 	}
 
-	// primary/secondary screen only initialization
-	if (m_isPrimary) {
+	if (1) {
 		// start watching for events on other windows
 		selectEvents(m_root);
 		m_xi2detected = detectXI2();
@@ -172,7 +171,7 @@ CXWindowsScreen::CXWindowsScreen(
 		// prepare to use input methods
 		openIM();
 	}
-	else {
+	if (!m_isPrimary) {
 		// become impervious to server grabs
 		XTestGrabControl(m_display, True);
 	}
@@ -840,6 +839,9 @@ CXWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y)
 							x, y, CurrentTime);
 	}
 	XFlush(m_display);
+
+	// Remember we asked for this.
+	pushMouseMove(x, y);
 }
 
 void
@@ -1260,7 +1262,7 @@ CXWindowsScreen::handleSystemEvent(const CEvent& event, void*)
 	}
 
 #ifdef HAVE_XI2
-	if (m_xi2detected) {
+	if (m_isPrimary && m_xi2detected) {
 		// Process RawMotion
 		XGenericEventCookie *cookie = (XGenericEventCookie*)&xevent->xcookie;
 			if (XGetEventData(m_display, cookie) &&
@@ -1295,7 +1297,7 @@ CXWindowsScreen::handleSystemEvent(const CEvent& event, void*)
 	// handle the event ourself
 	switch (xevent->type) {
 	case CreateNotify:
-		if (m_isPrimary) {
+		if (1) {
 			// select events on new window
 			selectEvents(xevent->xcreatewindow.window);
 		}
@@ -1398,6 +1400,9 @@ CXWindowsScreen::handleSystemEvent(const CEvent& event, void*)
 	case MotionNotify:
 		if (m_isPrimary) {
 			onMouseMove(xevent->xmotion);
+		}
+		else {
+			onMotionNotify(xevent->xmotion.x_root, xevent->xmotion.y_root);
 		}
 		return;
 

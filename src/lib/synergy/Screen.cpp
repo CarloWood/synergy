@@ -216,20 +216,20 @@ CScreen::keyUp(KeyID, KeyModifierMask, KeyButton button)
 void
 CScreen::mouseDown(ButtonID button)
 {
-	m_screen->fakeMouseButton(button, true);
+	m_screen->mouseDown(button);
 }
 
 void
 CScreen::mouseUp(ButtonID button)
 {
-	m_screen->fakeMouseButton(button, false);
+	m_screen->mouseUp(button);
 }
 
 void
 CScreen::mouseMove(SInt32 x, SInt32 y)
 {
 	assert(!m_isPrimary);
-	m_screen->fakeMouseMove(x, y);
+	m_screen->mouseMove(x, y);
 }
 
 void

@@ -755,6 +755,8 @@ CMSWindowsScreen::fakeMouseMove(SInt32 x, SInt32 y)
 	if (m_buttons[kButtonLeft]) {
 		m_draggingStarted = true;
 	}
+	// Remember we asked for this.
+	pushMouseMove(x, y);
 }
 
 void
@@ -973,6 +975,12 @@ CMSWindowsScreen::onPreDispatch(HWND hwnd,
 	switch (message) {
 	case SYNERGY_MSG_SCREEN_SAVER:
 		return onScreensaver(wParam != 0);
+
+	case SYNERGY_MSG_MOUSE_MOVE:
+		if (!m_isPrimary) {
+			onMotionNotify(static_cast<SInt32>(wParam), static_cast<SInt32>(lParam));
+		}
+		break;
 
 	case SYNERGY_MSG_DEBUG:
 		LOG((CLOG_DEBUG1 "hook: 0x%08x 0x%08x", wParam, lParam));

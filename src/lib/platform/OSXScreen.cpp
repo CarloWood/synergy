@@ -685,6 +685,9 @@ COSXScreen::fakeMouseMove(SInt32 x, SInt32 y)
 	m_xCursor        = static_cast<SInt32>(pos.x);
 	m_yCursor        = static_cast<SInt32>(pos.y);
 	m_cursorPosValid = true;
+
+	// Remember we asked for this.
+	pushMouseMove(x, y);
 }
 
 void
@@ -797,7 +800,7 @@ COSXScreen::enable()
 							new TMethodEventJob<COSXScreen>(this,
 								&COSXScreen::handleClipboardCheck));
 
-	if (m_isPrimary) {
+	if (1) {
 		// FIXME -- start watching jump zones
 		
 		// kCGEventTapOptionDefault = 0x00000000 (Missing in 10.4, so specified literally)
@@ -806,7 +809,7 @@ COSXScreen::enable()
 										handleCGInputEvent, 
 										this);
 	}
-	else {
+	if (!m_isPrimary) {
 		// FIXME -- prevent system from entering power save mode
 
 		if (m_autoShowHideCursor) {
@@ -1972,7 +1975,12 @@ COSXScreen::handleCGInputEvent(CGEventTapProxy proxy,
 		case kCGEventOtherMouseDragged:
 		case kCGEventMouseMoved:
 			pos = CGEventGetLocation(event);
-			screen->onMouseMove(pos.x, pos.y);
+			if (m_isPrimary) {
+				screen->onMouseMove(pos.x, pos.y);
+			}
+			else {
+				onMotionNotify(pos.x, pos.y);
+			}
 			
 			// The system ignores our cursor-centering calls if
 			// we don't return the event. This should be harmless,

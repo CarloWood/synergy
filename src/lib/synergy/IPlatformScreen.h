@@ -133,11 +133,32 @@ public:
 	//! Change dragging status
 	virtual void		setDraggingStarted(bool started) = 0;
 
+	//! Press mouse button.
+	/*!
+	Called when a mouse button press was received from the server.
+	*/
+	virtual void		mouseDown(ButtonID button) = 0;
+
+	//! Release mouse button.
+	/*!
+	Called when a mouse button release was received from the server.
+	*/
+	virtual void		mouseUp(ButtonID button) = 0;
+
 	//! Move mouse pointer.
 	/*!
 	Called when absolute mouse coordinates are received from the server.
 	*/
 	virtual void 		mouseMove(SInt32 x, SInt32 y) = 0;
+
+	//! Move mouse pointer.
+	/*!
+	Called when relative mouse coordinates are received from the server.
+	*/
+	virtual void 		mouseRelativeMove(SInt32 x, SInt32 y) = 0;
+
+	//! Received MotionEvent.
+	virtual void		onMotionNotify(SInt32 x, SInt32 y) = 0;
 
 	//@}
 	//! @name accessors

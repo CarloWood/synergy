@@ -90,7 +90,7 @@ CScreen::disable()
 		leave();
 	}
 	else if (m_isPrimary && !m_entered) {
-		enter(0);
+		enter(0, 0, 0);
 	}
 	m_screen->disable();
 	if (m_isPrimary) {
@@ -105,7 +105,7 @@ CScreen::disable()
 }
 
 void
-CScreen::enter(KeyModifierMask toggleMask)
+CScreen::enter(SInt32 xAbs, SInt32 yAbs, KeyModifierMask toggleMask)
 {
 	assert(m_entered == false);
 	LOG((CLOG_INFO "entering screen"));
@@ -113,7 +113,7 @@ CScreen::enter(KeyModifierMask toggleMask)
 	// now on screen
 	m_entered = true;
 
-	m_screen->enter();
+	m_screen->enter(xAbs, yAbs);
 	if (m_isPrimary) {
 		enterPrimary();
 	}

@@ -19,17 +19,31 @@
 #include "synergy/PlatformScreen.h"
 #include "synergy/App.h"
 #include "synergy/ArgsBase.h"
+#include "base/Log.h"
 
-CPlatformScreen::CPlatformScreen(IEventQueue* events) :
+CPlatformScreen::CPlatformScreen(IEventQueue* events, bool isPrimary) :
 	IPlatformScreen(events),
 	m_draggingStarted(false),
-	m_fakeDraggingStarted(false)
+	m_fakeDraggingStarted(false),
+	m_isPrimary(isPrimary),
+	m_isOnScreen(isPrimary),
+	m_x(0), m_y(0),
+	m_w(0), m_h(0)
 {
 }
 
 CPlatformScreen::~CPlatformScreen()
 {
 	// do nothing
+}
+
+void
+CPlatformScreen::enter(SInt32 xAbs, SInt32 yAbs)
+{
+	m_isOnScreen = true;
+	if (!m_isPrimary) {
+		mouseMove(xAbs, yAbs);
+	}
 }
 
 void
@@ -120,4 +134,12 @@ CPlatformScreen::isDraggingStarted()
 		return m_draggingStarted;
 	}
 	return false;
+}
+
+void
+CPlatformScreen::mouseMove(SInt32 x, SInt32 y)
+{
+	LOG((CLOG_DEBUG2 "Entering CPlatformScreen::mouseMove(%d, %d)", x, y));
+
+		fakeMouseMove(x, y);
 }

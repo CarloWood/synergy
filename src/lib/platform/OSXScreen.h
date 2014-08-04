@@ -85,7 +85,7 @@ public:
 	// IPlatformScreen overrides
 	virtual void		enable();
 	virtual void		disable();
-	virtual void		enter();
+	virtual void		enter(SInt32 xAbs, SInt32 yAbs);
 	virtual bool		leave();
 	virtual bool		setClipboard(ClipboardID, const IClipboard*);
 	virtual void		checkClipboards();
@@ -247,18 +247,10 @@ private:
 	typedef std::map<KeyModifierMask, UInt32> ModifierHotKeyMap;
 	typedef std::map<CHotKeyItem, UInt32> HotKeyToIDMap;
 
-	// true if screen is being used as a primary screen, false otherwise
-	bool				m_isPrimary;
-
-	// true if mouse has entered the screen
-	bool				m_isOnScreen;
-
 	// the display
 	CGDirectDisplayID	m_displayID;
 
 	// screen shape stuff
-	SInt32				m_x, m_y;
-	SInt32				m_w, m_h;
 	SInt32				m_xCenter, m_yCenter;
 
 	// mouse state

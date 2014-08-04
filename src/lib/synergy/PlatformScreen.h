@@ -30,7 +30,7 @@ subclasses to implement the rest.
 */
 class CPlatformScreen : public IPlatformScreen {
 public:
-	CPlatformScreen(IEventQueue* events);
+	CPlatformScreen(IEventQueue* events, bool isPrimary);
 	virtual ~CPlatformScreen();
 
 	// IScreen overrides
@@ -86,7 +86,7 @@ public:
 	// IPlatformScreen overrides
 	virtual void		enable() = 0;
 	virtual void		disable() = 0;
-	virtual void		enter() = 0;
+	virtual void		enter(SInt32 xAbs, SInt32 yAbs) = 0;
 	virtual bool		leave() = 0;
 	virtual bool		setClipboard(ClipboardID, const IClipboard*) = 0;
 	virtual void		checkClipboards() = 0;
@@ -119,9 +119,15 @@ protected:
 
 	// IPlatformScreen overrides
 	virtual void		handleSystemEvent(const CEvent& event, void*) = 0;
+	virtual void 		mouseMove(SInt32 x, SInt32 y);
 
 protected:
 	CString				m_draggingFilename;
 	bool				m_draggingStarted;
 	bool				m_fakeDraggingStarted;
+
+	bool				m_isPrimary;		// True if screen is being used as a primary screen, false otherwise.
+	bool				m_isOnScreen;		// true if mouse has entered the screen
+	SInt32				m_x, m_y;		// Screen shape.
+	SInt32				m_w, m_h;
 };

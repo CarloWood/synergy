@@ -62,7 +62,7 @@ public:
 	/*!
 	Called when the user navigates to this screen.
 	*/
-	virtual void		enter() = 0;
+	virtual void		enter(SInt32 xAbs, SInt32 yAbs) = 0;
 
 	//! Leave screen
 	/*!
@@ -132,6 +132,12 @@ public:
 
 	//! Change dragging status
 	virtual void		setDraggingStarted(bool started) = 0;
+
+	//! Move mouse pointer.
+	/*!
+	Called when absolute mouse coordinates are received from the server.
+	*/
+	virtual void 		mouseMove(SInt32 x, SInt32 y) = 0;
 
 	//@}
 	//! @name accessors

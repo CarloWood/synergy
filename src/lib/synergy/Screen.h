@@ -67,7 +67,7 @@ public:
 	Called when the user navigates to this screen.  \p toggleMask has the
 	toggle keys that should be turned on on the secondary screen.
 	*/
-	void				enter(KeyModifierMask toggleMask);
+	void				enter(SInt32 xAbs, SInt32 yAbs, KeyModifierMask toggleMask);
 
 	//! Leave screen
 	/*!

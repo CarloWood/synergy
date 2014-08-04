@@ -76,9 +76,7 @@ bool					COSXScreen::s_testedForGHOM = false;
 bool					COSXScreen::s_hasGHOM	    = false;
 
 COSXScreen::COSXScreen(IEventQueue* events, bool isPrimary, bool autoShowHideCursor) :
-	CPlatformScreen(events),
-	m_isPrimary(isPrimary),
-	m_isOnScreen(m_isPrimary),
+	CPlatformScreen(events, isPrimary),
 	m_cursorPosValid(false),
 	MouseButtonEventMap(NumButtonIDs),
 	m_cursorHidden(false),
@@ -874,7 +872,7 @@ COSXScreen::disable()
 }
 
 void
-COSXScreen::enter()
+COSXScreen::enter(SInt32 xAbs, SInt32 yAbs)
 {
 	showCursor();
 
@@ -901,7 +899,7 @@ COSXScreen::enter()
 	}
 
 	// now on screen
-	m_isOnScreen = true;
+	CPlatformScreen::enter(xAbs, yAbs);
 }
 
 bool

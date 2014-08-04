@@ -95,13 +95,9 @@ CMSWindowsScreen::CMSWindowsScreen(
 	bool noHooks,
 	bool stopOnDeskSwitch,
 	IEventQueue* events) :
-	CPlatformScreen(events),
-	m_isPrimary(isPrimary),
+	CPlatformScreen(events, isPrimary),
 	m_noHooks(noHooks),
-	m_isOnScreen(m_isPrimary),
 	m_class(0),
-	m_x(0), m_y(0),
-	m_w(0), m_h(0),
 	m_xCenter(0), m_yCenter(0),
 	m_multimon(false),
 	m_xCursor(0), m_yCursor(0),
@@ -291,7 +287,7 @@ CMSWindowsScreen::disable()
 }
 
 void
-CMSWindowsScreen::enter()
+CMSWindowsScreen::enter(SInt32 xAbs, SInt32 yAbs)
 {
 	m_desks->enter();
 	if (m_isPrimary) {
@@ -319,7 +315,7 @@ CMSWindowsScreen::enter()
 	}
 
 	// now on screen
-	m_isOnScreen = true;
+	CPlatformScreen::enter(xAbs, yAbs);
 	forceShowCursor();
 }
 

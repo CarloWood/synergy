@@ -105,7 +105,7 @@ public:
 	// IPlatformScreen overrides
 	virtual void		enable();
 	virtual void		disable();
-	virtual void		enter();
+	virtual void		enter(SInt32 xAbs, SInt32 yAbs);
 	virtual bool		leave();
 	virtual bool		setClipboard(ClipboardID, const IClipboard*);
 	virtual void		checkClipboards();
@@ -243,21 +243,13 @@ private:
 
 	static HINSTANCE	s_windowInstance;
 
-	// true if screen is being used as a primary screen, false otherwise
-	bool				m_isPrimary;
-
 	// true if hooks are not to be installed (useful for debugging)
 	bool				m_noHooks;
-
-	// true if mouse has entered the screen
-	bool				m_isOnScreen;
 
 	// our resources
 	ATOM				m_class;
 
 	// screen shape stuff
-	SInt32				m_x, m_y;
-	SInt32				m_w, m_h;
 	SInt32				m_xCenter, m_yCenter;
 
 	// true if system appears to have multiple monitors

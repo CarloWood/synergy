@@ -96,14 +96,11 @@ CXWindowsScreen::CXWindowsScreen(
 		bool disableXInitThreads,
 		int mouseScrollDelta,
 		IEventQueue* events) :
-	m_isPrimary(isPrimary),
+	CPlatformScreen(events, isPrimary),
 	m_mouseScrollDelta(mouseScrollDelta),
 	m_display(NULL),
 	m_root(None),
 	m_window(None),
-	m_isOnScreen(m_isPrimary),
-	m_x(0), m_y(0),
-	m_w(0), m_h(0),
 	m_xCenter(0), m_yCenter(0),
 	m_xCursor(0), m_yCursor(0),
 	m_keyState(NULL),
@@ -120,8 +117,7 @@ CXWindowsScreen::CXWindowsScreen(
 	m_xkb(false),
 	m_xi2detected(false),
 	m_xrandr(false),
-	m_events(events),
-	CPlatformScreen(events)
+	m_events(events)
 {
 	assert(s_screen == NULL);
 
@@ -267,7 +263,7 @@ CXWindowsScreen::disable()
 }
 
 void
-CXWindowsScreen::enter()
+CXWindowsScreen::enter(SInt32 xAbs, SInt32 yAbs)
 {
 	screensaver(false);
 
@@ -322,7 +318,7 @@ CXWindowsScreen::enter()
 	}
 
 	// now on screen
-	m_isOnScreen = true;
+	CPlatformScreen::enter(xAbs, yAbs);
 }
 
 bool

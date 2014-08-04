@@ -57,6 +57,7 @@ public:
 	virtual void		fakeMouseMove(SInt32 x, SInt32 y) = 0;
 	virtual void		fakeMouseRelativeMove(SInt32 dx, SInt32 dy) const = 0;
 	virtual void		fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const = 0;
+	virtual void		mouseWarp(SInt32 x, SInt32 y);
 
 	// IKeyState overrides
 	virtual void		updateKeyMap();

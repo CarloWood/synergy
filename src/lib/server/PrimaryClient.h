@@ -104,12 +104,6 @@ public:
 	virtual KeyModifierMask		
 						getToggleMask() const;
 
-	//! Get screen lock state
-	/*!
-	Returns true if the user is locked to the screen.
-	*/
-	bool				isLockedToScreen() const;
-
 	//@}
 
 	// FIXME -- these probably belong on IScreen

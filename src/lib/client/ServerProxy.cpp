@@ -99,6 +99,15 @@ CServerProxy::resetKeepAliveAlarm()
 }
 
 void
+CServerProxy::mouseWarp()
+{
+	SInt16 x, y;
+	CProtocolUtil::readf(m_stream, kMsgDMouseWarp + 4, &x, &y);
+	LOG((CLOG_DEBUG1 "CServerProxy::mouseWarp(): received mouse warp %d, %d", x, y));
+	m_client->mouseWarp(x, y);
+}
+
+void
 CServerProxy::setKeepAliveRate(double rate)
 {
 	m_keepAliveAlarm = rate * kKeepAlivesUntilDeath;
@@ -253,6 +262,10 @@ CServerProxy::parseMessage(const UInt8* code)
 		// echo keep alives and reset alarm
 		CProtocolUtil::writef(m_stream, kMsgCKeepAlive);
 		resetKeepAliveAlarm();
+	}
+
+	else if (memcmp(code, kMsgDMouseWarp, 4) == 0) {
+		mouseWarp();
 	}
 
 	else if (memcmp(code, kMsgCNoop, 4) == 0) {
@@ -954,3 +967,19 @@ CServerProxy::sendDragInfo(UInt32 fileCount, const char* info, size_t size)
 	CString data(info, size);
 	CProtocolUtil::writef(m_stream, kMsgDDragInfo, fileCount, &data);
 }
+
+void
+CServerProxy::warpMouse(SInt32 x, SInt32 y)
+{
+	LOG((CLOG_DEBUG1 "CServerProxy::warpMouse(%d, %d): sending mouse warp", x, y));
+	CProtocolUtil::writef(m_stream, kMsgDMouseWarp, x, y);
+}
+
+void
+CServerProxy::lockScreen(bool lock)
+{
+	SInt32 ilock = lock;
+	LOG((CLOG_DEBUG1 "CServerProxy::lockScreen(%1i): sending lock screen ", ilock));
+	CProtocolUtil::writef(m_stream, kMsgDLockScreen, ilock);
+}
+

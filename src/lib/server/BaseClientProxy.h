@@ -83,6 +83,12 @@ public:
 	virtual void		fileChunkSending(UInt8 mark, char* data, size_t dataSize) = 0;
 	virtual CString		getName() const;
 
+	//! Get screen lock state
+	/*!
+	Returns true if the cursor is locked to the screen.
+	*/
+	virtual bool		isLockedToScreen() const { return false; }
+
 private:
 	CString				m_name;
 	SInt32				m_x, m_y;

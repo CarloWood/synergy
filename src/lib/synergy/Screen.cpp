@@ -363,30 +363,6 @@ CScreen::isOnScreen() const
 	return m_entered;
 }
 
-bool
-CScreen::isLockedToScreen() const
-{
-	// check for pressed mouse buttons
-	// HACK: commented out as it breaks new drag drop feature
-	UInt32 buttonID = 0;
-
-	if (m_screen->isAnyMouseButtonDown(buttonID)) {
-		if (buttonID != kButtonLeft) {
-			LOG((CLOG_DEBUG "locked by mouse buttonID: %d", buttonID));
-		}
-		
-		if (m_enableDragDrop) {
-			return (buttonID == kButtonLeft) ? false : true;
-		}
-		else {
-			return true;
-		}
-	}
-
-	// not locked
-	return false;
-}
-
 SInt32
 CScreen::getJumpZoneSize() const
 {

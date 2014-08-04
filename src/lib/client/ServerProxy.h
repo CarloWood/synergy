@@ -60,6 +60,12 @@ public:
 	// sending dragging information to server
 	void				sendDragInfo(UInt32 fileCount, const char* info, size_t size);
 	
+	// sending mouse warp coordinates to server
+	void				warpMouse(SInt32 x, SInt32 y);
+
+	// sending lock screen message.
+	void				lockScreen(bool lock);
+
 #ifdef TEST_ENV
 	void				handleDataForTest() { handleData(CEvent(), NULL); }
 #endif
@@ -99,6 +105,7 @@ private:
 	void				mouseMove();
 	void				mouseRelativeMove();
 	void				mouseWheel();
+	void				mouseWarp();
 	void				cryptoIv();
 	void				screensaver();
 	void				resetOptions();

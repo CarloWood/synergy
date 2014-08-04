@@ -58,4 +58,7 @@ public:
 	virtual void		fakeMouseWheel(SInt32 xDelta, SInt32 yDelta) const = 0;
 
 	//@}
+
+	//! Warp the mouse
+	virtual void		mouseWarp(SInt32 x, SInt32 y) = 0;
 };

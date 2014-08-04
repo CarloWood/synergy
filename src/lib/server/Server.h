@@ -154,6 +154,15 @@ public:
 	//! Received dragging information from client
 	void				dragInfoReceived(UInt32 fileNum, CString content);
 	
+	//! Received mouse warp information from client
+	/*!
+	Returns true if the warp was processed, false if it was ignored.
+	*/
+	bool				mouseWarp(CBaseClientProxy* client_proxy, SInt32 x, SInt32 y);
+
+	//! Force a mouse move message to the active client.
+	void				sendMouseMove();
+
 	//@}
 	//! @name accessors
 	//@{

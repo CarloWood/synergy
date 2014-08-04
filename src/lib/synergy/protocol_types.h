@@ -27,9 +27,10 @@
 // 1.3:  adds keep alive and deprecates heartbeats,
 //       adds horizontal mouse scrolling
 // 1.4:  adds crypto support
+// 1.6:  adds mouse warping support
 // NOTE: with new version, synergy minor version should increment
 static const SInt16		kProtocolMajorVersion = 1;
-static const SInt16		kProtocolMinorVersion = 5;
+static const SInt16		kProtocolMinorVersion = 6;
 
 // default contact port number
 static const UInt16		kDefaultPort = 24800;
@@ -212,6 +213,13 @@ extern const char*		kMsgDMouseMove;
 // relative mouse move:  primary -> secondary
 // $1 = dx, $2 = dy.  dx,dy are motion deltas.
 extern const char*		kMsgDMouseRelMove;
+
+// mouse warp: secondary <--> primary
+// $1 = dx, $2 = dy. dx,dy are offsets.
+extern const char*		kMsgDMouseWarp;
+
+// (Un)lock screen: secondary -> primary
+extern const char*		kMsgDLockScreen;
 
 // mouse scroll:  primary -> secondary
 // $1 = xDelta, $2 = yDelta.  the delta should be +120 for one tick forward

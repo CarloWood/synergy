@@ -420,8 +420,8 @@ CServer::isLockedToScreen() const
 		return true;
 	}
 
-	// locked if primary says we're locked
-	if (m_primaryClient->isLockedToScreen()) {
+	// locked if current screen says we're locked
+	if (m_primaryClient != m_active && m_active->isLockedToScreen()) {
 		return true;
 	}
 
@@ -1078,9 +1078,30 @@ CServer::stopRelativeMoves()
 		m_yDelta  = 0;
 		m_xDelta2 = 0;
 		m_yDelta2 = 0;
-		LOG((CLOG_DEBUG2 "synchronize move on %s by %d,%d", getName(m_active).c_str(), m_x, m_y));
-		m_active->mouseMove(m_x, m_y);
+		sendMouseMove();
 	}
+}
+
+bool
+CServer::mouseWarp(CBaseClientProxy* client_proxy, SInt32 x, SInt32 y)
+{
+	assert(client_proxy != m_primaryClient);
+	if (m_active == client_proxy) {
+		m_x += x;
+		m_y += y;
+		onMouseMoveSecondary(0, 0);
+		// Return true if we're still on the same screen.
+		return m_active == client_proxy;
+	}
+	return false;
+}
+
+void
+CServer::sendMouseMove()
+{
+	assert(m_active != m_primaryClient);
+	LOG((CLOG_DEBUG2 "synchronize move on %s by %d,%d", getName(m_active).c_str(), m_x, m_y));
+	m_active->mouseMove(m_x, m_y);
 }
 
 void
@@ -1857,7 +1878,7 @@ CServer::onMouseMoveSecondary(SInt32 dx, SInt32 dy)
 	// the mouse isn't actually moving because we're expecting some
 	// program on the secondary screen to warp the mouse on us, so we
 	// have no idea where it really is.
-	if (m_relativeMoves && isLockedToScreenServer()) {
+	if (isLockedToScreen()) {
 		LOG((CLOG_DEBUG2 "relative move on %s by %d,%d", getName(m_active).c_str(), dx, dy));
 		m_active->mouseRelativeMove(dx, dy);
 		return;

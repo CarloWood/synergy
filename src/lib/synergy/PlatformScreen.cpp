@@ -143,3 +143,9 @@ CPlatformScreen::mouseMove(SInt32 x, SInt32 y)
 
 		fakeMouseMove(x, y);
 }
+
+void
+CPlatformScreen::mouseWarp(SInt32 x, SInt32 y)
+{
+}
+

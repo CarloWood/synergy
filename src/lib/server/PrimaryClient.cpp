@@ -94,12 +94,6 @@ CPrimaryClient::getToggleMask() const
 	return m_screen->pollActiveModifiers();
 }
 
-bool
-CPrimaryClient::isLockedToScreen() const
-{
-	return m_screen->isLockedToScreen();
-}
-
 void*
 CPrimaryClient::getEventTarget() const
 {

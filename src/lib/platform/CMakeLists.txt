@@ -47,7 +47,10 @@ endif()
 
 include_directories(${inc})
 add_library(platform STATIC ${sources})
-target_link_libraries(platform client ${libs})
+
+if (WIN32)
+	target_link_libraries(platform client ${libs})
+endif()
 
 if (UNIX)
 	target_link_libraries(platform io net ipc synergy client ${libs})
@@ -55,5 +58,5 @@ endif()
 
 if (APPLE)
 	find_library(COCOA_LIBRARY Cocoa)
-	target_link_libraries(platform ${COCOA_LIBRARY})
+	target_link_libraries(platform client ${libs} ${COCOA_LIBRARY})
 endif()

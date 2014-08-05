@@ -88,6 +88,7 @@ public:
 	Returns true if the cursor is locked to the screen.
 	*/
 	virtual bool		isLockedToScreen() const { return false; }
+	virtual void		unlockScreen() { }
 
 private:
 	CString				m_name;

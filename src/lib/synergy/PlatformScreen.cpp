@@ -204,9 +204,9 @@ CPlatformScreen::mouseDown(ButtonID button)
 	if (button < 32) {
 		UInt32 mask = 1U << button;
 		if (!(m_buttons & mask)) {
-			if (m_buttons == 0) {
+			if (m_buttons == 0 && !m_relativeMouseMode) {
 				// The first mouse button was pressed.
-				LOG((CLOG_DEBUG1 "CPlatformScreen::mouseDown(%d): switched to relative mouse mode!", (int)button));
+				LOG((CLOG_DEBUG1 "CPlatformScreen::mouseDown(%d): switched to relative mouse mode", (int)button));
 				m_relativeMouseMode = true;
 			}
 			m_buttons |= mask;
@@ -232,11 +232,11 @@ CPlatformScreen::mouseUp(ButtonID button)
 			m_buttons &= ~mask;
 			if (m_buttons == 0) {
 				// All mouse buttons were released.
-				if (m_rcvdMouse_valid &&
+				if (m_relativeMouseMode && m_rcvdMouse_valid &&
 				    m_motionEventMouseX == m_rcvdMouseX &&
 				    m_motionEventMouseY == m_rcvdMouseY &&
 				    m_tail == m_head) {
-					LOG((CLOG_DEBUG1 "CPlatformScreen::mouseUp(%d): switched to absolute mouse mode!"));
+					LOG((CLOG_DEBUG1 "CPlatformScreen::mouseUp(%d): switched to absolute mouse mode"));
 					m_relativeMouseMode = false;
 				}
 			}
@@ -334,12 +334,13 @@ CPlatformScreen::mouseRelativeMove(SInt32 x, SInt32 y)
 void
 CPlatformScreen::onMotionNotify(SInt32 x, SInt32 y)
 {
-	LOG((CLOG_DEBUG2 "Calling CPlatformScreen::onMotionNotify(%d, %d)", x, y));
+	LOG((CLOG_DEBUG2 "Calling CPlatformScreen::onMotionNotify(%d, %d) m_isOnScreen = %d, m_rcvdMouse_valid = %d, m_locked = %d", x, y, m_isOnScreen, m_rcvdMouse_valid, m_locked));
 
 
-	// We don't need to take any action when the mouse isn't on this screen,
-	// or when we don't have a notion of serverside mouse position.
-	if (!m_isOnScreen || !m_rcvdMouse_valid) {
+	// We don't need to take any action when the mouse isn't on
+	// this screen and eiter m_rcvdMouse_valid or m_locked.
+	if (!(m_isOnScreen && (m_rcvdMouse_valid || m_locked))) {
+		LOG((CLOG_DEBUG2 "Leaving CPlatformScreen::onMotionNotify(%d, %d) because !m_isOnScreen || (!m_rcvdMouse_valid && !m_locked)", x, y));
 		return;
 	}
 
@@ -370,6 +371,7 @@ CPlatformScreen::onMotionNotify(SInt32 x, SInt32 y)
 		}
 	}
 	if (m_relativeMouseMode) {
+		LOG((CLOG_DEBUG2 "Leaving CPlatformScreen::onMotionNotify(%d, %d) because m_relativeMouseMode; m_buttons = %d, m_locked = %d", x, y, m_buttons, m_locked));
 		m_tail = m_head;
 		return;
 	}

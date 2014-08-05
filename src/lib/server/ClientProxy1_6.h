@@ -31,6 +31,7 @@ public:
 
 	virtual bool		parseMessage(const UInt8* code);
 	virtual bool		isLockedToScreen() const { return m_isLockedToScreen; }
+	virtual void		unlockScreen() { m_isLockedToScreen = false; }
 
 	void			mouseWarp(SInt32 x, SInt32 y);	// Send
 	void			mouseWarp();			// Receive

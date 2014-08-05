@@ -417,12 +417,13 @@ CServer::isLockedToScreen() const
 {
 	// locked if we say we're locked
 	if (isLockedToScreenServer()) {
-		LOG((CLOG_NOTE "cursor is locked to screen"));
+		LOG((CLOG_NOTE "cursor is locked to screen (server)"));
 		return true;
 	}
 
 	// locked if current screen says we're locked
 	if (m_primaryClient != m_active && m_active->isLockedToScreen()) {
+		LOG((CLOG_NOTE "%s has locked the cursor to its screen", getName(m_active).c_str()));
 		return true;
 	}
 
@@ -493,6 +494,7 @@ CServer::switchScreen(CBaseClientProxy* dst,
 
 		// cut over
 		m_active = dst;
+		m_active->unlockScreen();
 
 		// increment enter sequence number
 		++m_seqNum;
@@ -1069,7 +1071,10 @@ CServer::getCorner(CBaseClientProxy* client,
 void
 CServer::stopRelativeMoves()
 {
-	if (m_relativeMoves && m_active != m_primaryClient) {
+	if (m_active == m_primaryClient) {
+		return;
+	}
+	if (m_relativeMoves) {
 		// warp to the center of the active client so we know where we are
 		SInt32 ax, ay, aw, ah;
 		m_active->getShape(ax, ay, aw, ah);
@@ -1081,6 +1086,7 @@ CServer::stopRelativeMoves()
 		m_yDelta2 = 0;
 		sendMouseMove();
 	}
+	m_active->unlockScreen();
 }
 
 bool

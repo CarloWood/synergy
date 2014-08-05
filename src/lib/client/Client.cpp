@@ -818,7 +818,7 @@ CClient::sendDragInfo(UInt32 fileCount, CString& info, size_t size)
 }
 
 void
-CClient::warpMouse(SInt32 x, SInt32 y)
+CClient::warpMouse(SInt16 x, SInt16 y)
 {
 	m_server->warpMouse(x, y);
 }
@@ -830,7 +830,7 @@ CClient::lockScreen(bool lock)
 }
 
 void
-CClient::mouseWarp(SInt32 x, SInt32 y)
+CClient::mouseWarp(SInt16 x, SInt16 y)
 {
 	m_screen->getPlatformScreen()->mouseWarp(x, y);
 }

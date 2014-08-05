@@ -61,7 +61,7 @@ public:
 	void				sendDragInfo(UInt32 fileCount, const char* info, size_t size);
 	
 	// sending mouse warp coordinates to server
-	void				warpMouse(SInt32 x, SInt32 y);
+	void				warpMouse(SInt16 x, SInt16 y);
 
 	// sending lock screen message.
 	void				lockScreen(bool lock);

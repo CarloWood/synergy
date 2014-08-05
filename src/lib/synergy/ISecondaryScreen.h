@@ -60,5 +60,5 @@ public:
 	//@}
 
 	//! Warp the mouse
-	virtual void		mouseWarp(SInt32 x, SInt32 y) = 0;
+	virtual void		mouseWarp(SInt16 x, SInt16 y) = 0;
 };

@@ -38,7 +38,7 @@ CClientProxy1_6::~CClientProxy1_6()
 }
 
 void
-CClientProxy1_6::mouseWarp(SInt32 x, SInt32 y)
+CClientProxy1_6::mouseWarp(SInt16 x, SInt16 y)
 {
 	LOG((CLOG_DEBUG1 "CClientProxy1_6::mouseWarp(%d, %d): sending mouse warp", x, y));
 	CProtocolUtil::writef(getStream(), kMsgDMouseWarp, x, y);
@@ -77,7 +77,7 @@ CClientProxy1_6::mouseWarp()
 void
 CClientProxy1_6::lockScreen()
 {
-	SInt32 lock;
+	SInt8 lock;
 	CProtocolUtil::readf(getStream(), kMsgDLockScreen + 4, &lock);
 	LOG((CLOG_DEBUG1 "CClientProxy1_6::lockScreen(): received lock screen %d", lock));
 

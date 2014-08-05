@@ -114,10 +114,10 @@ public:
 	void				sendDragInfo(UInt32 fileCount, CString& info, size_t size);
 	
 	//! Send mouse warp information to server
-	void				warpMouse(SInt32 x, SInt32 y);
+	void				warpMouse(SInt16 x, SInt16 y);
 
 	//! Received mouse warp information from server
-	void				mouseWarp(SInt32 x, SInt32 y);
+	void				mouseWarp(SInt16 x, SInt16 y);
 
 	//! Send screen (un)lock request to server
 	void				lockScreen(bool lock);

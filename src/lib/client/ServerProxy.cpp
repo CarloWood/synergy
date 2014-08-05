@@ -969,7 +969,7 @@ CServerProxy::sendDragInfo(UInt32 fileCount, const char* info, size_t size)
 }
 
 void
-CServerProxy::warpMouse(SInt32 x, SInt32 y)
+CServerProxy::warpMouse(SInt16 x, SInt16 y)
 {
 	LOG((CLOG_DEBUG1 "CServerProxy::warpMouse(%d, %d): sending mouse warp", x, y));
 	CProtocolUtil::writef(m_stream, kMsgDMouseWarp, x, y);
@@ -978,7 +978,7 @@ CServerProxy::warpMouse(SInt32 x, SInt32 y)
 void
 CServerProxy::lockScreen(bool lock)
 {
-	SInt32 ilock = lock;
+	SInt8 ilock = lock;
 	LOG((CLOG_DEBUG1 "CServerProxy::lockScreen(%1i): sending lock screen ", ilock));
 	CProtocolUtil::writef(m_stream, kMsgDLockScreen, ilock);
 }

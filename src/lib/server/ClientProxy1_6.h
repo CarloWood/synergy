@@ -33,7 +33,7 @@ public:
 	virtual bool		isLockedToScreen() const { return m_isLockedToScreen; }
 	virtual void		unlockScreen() { m_isLockedToScreen = false; }
 
-	void			mouseWarp(SInt32 x, SInt32 y);	// Send
+	void			mouseWarp(SInt16 x, SInt16 y);	// Send
 	void			mouseWarp();			// Receive
 	void			lockScreen();			// Receive
 

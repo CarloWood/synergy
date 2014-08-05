@@ -396,7 +396,7 @@ CPlatformScreen::onMotionNotify(SInt32 x, SInt32 y)
 }
 
 void
-CPlatformScreen::mouseWarp(SInt32 x, SInt32 y)
+CPlatformScreen::mouseWarp(SInt16 x, SInt16 y)
 {
 	if (!m_rcvdMouse_valid) {
 		return;
